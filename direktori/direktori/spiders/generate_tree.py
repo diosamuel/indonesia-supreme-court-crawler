@@ -37,8 +37,6 @@ class GenerateTree(scrapy.Spider):
             if len(klasifikasi) > 0: # check validity of klasifikasi
                 self.tree[direktori][klasifikasi] = {}
                 if int(traverseKlasifikasiTotal[index]) < 10000: # limit
-                    print("[============]")
-                    print(klasifikasi)
                     pass
                 else:
                     yield scrapy.Request(klasifikasi, callback=self.parseTraversePengadilan,cb_kwargs={
@@ -60,8 +58,6 @@ class GenerateTree(scrapy.Spider):
                 self.tree[direktori][klasifikasi][pengadilan] = {}
                 print(traversePengadilanTotal,index)
                 if int(traversePengadilanTotal[index]) < 10000:
-                    print("[============]")
-                    print(pengadilan)
                     pass
                 else:
                     yield scrapy.Request(pengadilan, callback=self.findYear,cb_kwargs={

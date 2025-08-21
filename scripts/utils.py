@@ -1,5 +1,5 @@
 import re, hashlib
-
+import datetime
 def make_hash_id(text):
     cleaned = re.sub(r'[^a-zA-Z0-9]', '', text).lower()
     return hashlib.sha256(cleaned.encode('utf-8')).hexdigest()
@@ -31,3 +31,15 @@ def convert_to_ymd(date_str):
     date_en = f"{day} {month_en} {year}"
     dt = datetime.strptime(date_en, "%d %B %Y")
     return dt.strftime("%Y-%m-%d")
+
+def safe_date(date_str):
+    DEFAULT_DATE = datetime.date(1970, 1, 1)
+    if not date_str:
+        return DEFAULT_DATE
+    try:
+        return datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
+    except Exception:
+        return DEFAULT_DATE
+
+def safe_str(val):
+    return val if (val is not None and isinstance(val, str)) else ''

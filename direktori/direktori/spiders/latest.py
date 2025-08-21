@@ -4,7 +4,7 @@ import re
 from scripts.utils import make_hash_id
 from direktori.items import PutusanItem
 import logging
-
+from db.utils import insert_data
 class LatestSpider(scrapy.Spider):
     stop_crawling = False
     currentPage = 1
@@ -56,11 +56,19 @@ class LatestSpider(scrapy.Spider):
                 info_text = post.css('div > div:nth-child(4)::text').get()
                 if info_text:
                     lines = info_text.strip().split('—')
+                    print(lines)
                     item['upload'] = lines[0].replace('Tanggal', '').strip()
                 item["timestamp"] = datetime.datetime.now().strftime("%c")
                 try:
-                    # insertData(item, 'list_putusan', ['upload', 'link_detail', 'nomor','hash_id','page','scraped_at'])
-                    print(item)
+                    insert_data(table='list_putusan',
+                                data={
+                                    'upload':item["upload"],
+                                    'timestamp':item["timestamp"],
+                                    'link_detail':item["link_detail"],
+                                    'nomor':item['nomor'],
+                                    'hash_id':item['hash_id']
+                                })
+                    logging.info(item)
                 except Exception as e:
                     logging.error(f"SQL Error: {str(e)}")
                     raise Exception(f"Failed to insert data into database: {str(e)}")

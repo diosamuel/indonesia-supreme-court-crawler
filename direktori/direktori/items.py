@@ -44,12 +44,17 @@ class DeskripsiPutusanItem(scrapy.Item):
 # ==========================
 # Tabel: putusan_terkait
 # ==========================
-class PutusanTerkaitItem(scrapy.Item):
-    hash_id = scrapy.Field()             
-    pertama = scrapy.Field()             
+class PutusanTerkaitItem(scrapy.Item):     
+    pertama = scrapy.Field()
+    link_pertama = scrapy.Field()             
     banding = scrapy.Field()             
+    link_banding = scrapy.Field()             
     kasasi = scrapy.Field()              
+    link_kasasi = scrapy.Field()                 
     peninjauan_kembali = scrapy.Field()  
+    link_peninjauan_kembali = scrapy.Field()  
+    lainnya = scrapy.Field()
+    link_lainnya = scrapy.Field()
 
 # ==========================
 # Tabel: ekstraksi_pdf
