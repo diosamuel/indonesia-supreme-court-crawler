@@ -67,7 +67,8 @@ class LatestSpider(scrapy.Spider):
                                     'link_detail':item["link_detail"],
                                     'nomor':item['nomor'],
                                     'hash_id':item['hash_id']
-                                })
+                                },
+                                key="hash_id")
                     logging.info(item)
                 except Exception as e:
                     logging.error(f"SQL Error: {str(e)}")
