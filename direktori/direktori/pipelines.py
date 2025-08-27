@@ -6,6 +6,14 @@ from scripts.utils import make_hash_id
 from scripts.utils import convert_to_ymd
 from db.utils import insert_data
 class DeskripsiPutusanItemPipeline:
+    def safe_retrieve(self, key,informasi=None, adapter=None):
+        if informasi:
+            return informasi[key] if key in informasi else ''
+        elif adapter:
+            return adapter[key] if key in adapter else ''
+        else:
+            return ''
+        
     def process_item(self, item, spider):
         print("===PIPE===")
         adapter = ItemAdapter(item)
@@ -30,31 +38,31 @@ class DeskripsiPutusanItemPipeline:
         insert_data(
             table="informasi_putusan",
             data={
-                "hash_id": adapter["hash_id"],
-                "link_detail": adapter["url"],
-                "timestamp":adapter["timestamp"],
-                "nomor": informasi["nomor"],
-                "tahun_putusan": informasi["tahun_putusan"],
-                "tingkat_proses": informasi["tingkat_proses"],
-                "jenis_lembaga_peradilan": informasi["jenis_lembaga_peradilan"],
-                "lembaga_peradilan": informasi["lembaga_peradilan"],
-                "klasifikasi": informasi["klasifikasi"],
-                "kaidah": informasi["kaidah"],
-                "kata_kunci": informasi["kata_kunci"],
-                "abstrak": informasi["abstrak"],
-                "amar": informasi["amar"],
-                "catatan_amar": informasi["catatan_amar"],
-                "hakim_ketua": informasi["hakim_ketua"],
-                "hakim_anggota": informasi["hakim_anggota"],
-                "panitera": informasi["panitera"],
-                "tanggal_register": informasi["tanggal_register"],
-                "tanggal_musyawarah": informasi["tanggal_musyawarah"],
-                "tanggal_dibacakan": informasi["tanggal_dibacakan"],
-                "jumlah_download": informasi["jumlah_download"],
-                "jumlah_view": informasi["jumlah_view"],
-                "link_pdf": informasi["link_pdf"],
-                "link_zip": informasi["link_zip"],
-                "putusan": str(informasi["putusan_terkait"]),
+                "hash_id":  self.safe_retrieve("hash_id",adapter=adapter),
+                "link_detail":  self.safe_retrieve("url",adapter=adapter),
+                "timestamp":  self.safe_retrieve("timestamp",adapter=adapter),
+                "nomor": self.safe_retrieve("nomor",informasi=informasi),
+                "tahun_putusan": self.safe_retrieve("tahun_putusan",informasi=informasi),
+                "tingkat_proses": self.safe_retrieve("tingkat_proses",informasi=informasi),
+                "jenis_lembaga_peradilan": self.safe_retrieve("jenis_lembaga_peradilan",informasi=informasi),
+                "lembaga_peradilan": self.safe_retrieve("lembaga_peradilan",informasi=informasi),
+                "klasifikasi": self.safe_retrieve("klasifikasi",informasi=informasi),
+                "kaidah": self.safe_retrieve("kaidah",informasi=informasi),
+                "kata_kunci": self.safe_retrieve("kata_kunci",informasi=informasi),
+                "abstrak": self.safe_retrieve("abstrak",informasi=informasi),
+                "amar": self.safe_retrieve("amar",informasi=informasi),
+                "catatan_amar": self.safe_retrieve("catatan_amar",informasi=informasi),
+                "hakim_ketua": self.safe_retrieve("hakim_ketua",informasi=informasi),
+                "hakim_anggota": self.safe_retrieve("hakim_anggota",informasi=informasi),
+                "panitera": self.safe_retrieve("panitera",informasi=informasi),
+                "tanggal_register": self.safe_retrieve("tanggal_register",informasi=informasi),
+                "tanggal_musyawarah": self.safe_retrieve("tanggal_musyawarah",informasi=informasi),
+                "tanggal_dibacakan": self.safe_retrieve("tanggal_dibacakan",informasi=informasi),
+                "jumlah_download": self.safe_retrieve("jumlah_download",informasi=informasi),
+                "jumlah_view": self.safe_retrieve("jumlah_view",informasi=informasi),
+                "link_pdf": self.safe_retrieve("link_pdf",informasi=informasi),
+                "link_zip": self.safe_retrieve("link_zip",informasi=informasi),
+                "putusan": str(self.safe_retrieve("link_zip",informasi=informasi)),
             },
             key="hash_id"
         )

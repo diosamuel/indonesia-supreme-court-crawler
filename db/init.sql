@@ -92,3 +92,44 @@ CREATE TABLE IF NOT EXISTS ekstraksi_pdf (
 )
 ENGINE = MergeTree
 ORDER BY hash_id;
+
+--
+create table tree_direktori (
+    level Int32,
+    tipe Enum('direktori','klasifikasi','pengadilan','upload'),
+    link_detail String,
+    id UUID default generateUUIDv4(),
+    parent String,
+)
+ENGINE = MergeTree
+ORDER BY (level);
+
+create table tree_klasifikasi (
+    level Int32,
+    tipe Enum('direktori','klasifikasi','pengadilan','upload'),
+    link_detail String,
+    id UUID default generateUUIDv4(),
+    parent String,
+)
+ENGINE = MergeTree
+ORDER BY (level);
+
+create table tree_pengadilan (
+    level Int32,
+    tipe Enum('direktori','klasifikasi','pengadilan','upload'),
+    link_detail String,
+    id UUID default generateUUIDv4(),
+    parent String,
+)
+ENGINE = MergeTree
+ORDER BY (level);
+
+create table tree_upload (
+    level Int32,
+    tipe Enum('direktori','klasifikasi','pengadilan','upload'),
+    link_detail String,
+    id UUID default generateUUIDv4(),
+    parent String,
+)
+ENGINE = MergeTree
+ORDER BY (level);

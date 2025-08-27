@@ -2,6 +2,7 @@ import scrapy
 import re
 import logging
 import json
+from db.utils import insert_data,retrieve_data
 """
 Generate big tree combination putusan MA and store it into crawl_populate.json
 tree = {
@@ -21,14 +22,27 @@ class GenerateTree(scrapy.Spider):
     tree = {}
     def parse(self, response):
         traverseDirektori = response.xpath('(//*[@aria-labelledby="headingOne"])[1]//a/@href').getall()
+        traverseDirektori.remove("https://putusan3.mahkamahagung.go.id/direktori.html")
         for i, direktori in enumerate(traverseDirektori):
-            if direktori != "https://putusan3.mahkamahagung.go.id/direktori.html":
-                self.tree[direktori] = {}
-                yield scrapy.Request(
-                    direktori, 
-                    callback=self.parseTraverseKlasifikasi,
-                    cb_kwargs={'direktori': direktori},
-                )
+            self.tree[direktori] = {}
+            retrieveCount = retrieve_data(column="count(*)",table="tree_direktori")
+            if len(retrieveCount) > 0:
+                totalData = int(retrieveCount[0][0]) # total yang sudah diambil
+            if totalData != len(traverseDirektori):                    
+                insert_data(table="tree_direktori",data={
+                    "link_detail":direktori,
+                    "level":1,
+                    "tipe":"direktori",
+                    "parent":''
+                },key="link_detail")
+            else:
+                logging.info("Direktori already exists")
+                pass
+            yield scrapy.Request(
+                direktori, 
+                callback=self.parseTraverseKlasifikasi,
+                cb_kwargs={'direktori': direktori},
+            )
 
     def parseTraverseKlasifikasi(self, response, direktori):
         traverseKlasifikasi = response.xpath('(//*[@aria-labelledby="headingOne"])[2]//a/@href').getall()
@@ -36,6 +50,12 @@ class GenerateTree(scrapy.Spider):
         for index,klasifikasi in enumerate(traverseKlasifikasi):
             if len(klasifikasi) > 0: # check validity of klasifikasi
                 self.tree[direktori][klasifikasi] = {}
+                insert_data(table="tree_klasifikasi",data={
+                    "link_detail":klasifikasi,
+                    "level":2,
+                    "tipe":"klasifikasi",
+                    "parent":direktori
+                },key="link_detail")
                 if int(traverseKlasifikasiTotal[index]) < 10000: # limit
                     pass
                 else:
@@ -43,7 +63,7 @@ class GenerateTree(scrapy.Spider):
                         'direktori':direktori,
                         'klasifikasi':klasifikasi,
                     })
-        
+    
         with open("logger.log",'w') as f:
             f.write(f"{direktori} - {klasifikasi}")
 
@@ -56,7 +76,14 @@ class GenerateTree(scrapy.Spider):
         for index,pengadilan in enumerate(traversePengadilan):
             if len(pengadilan) > 0:# check validity of pengadilan
                 self.tree[direktori][klasifikasi][pengadilan] = {}
-                print(traversePengadilanTotal,index)
+                
+                insert_data(table="tree_pengadilan",data={
+                    "link_detail":pengadilan,
+                    "level":3,
+                    "tipe":"pengadilan",
+                    "parent":klasifikasi
+                },key="link_detail")
+
                 if int(traversePengadilanTotal[index]) < 10000:
                     pass
                 else:
@@ -82,7 +109,15 @@ class GenerateTree(scrapy.Spider):
     def parseTraverseTahun(self,response,direktori,klasifikasi,pengadilan):
         traverseTahun = set(response.xpath('//tbody/tr/td/a/@href').getall())
         self.tree[direktori][klasifikasi][pengadilan]["upload"] = list(traverseTahun)
-        
+
+        for tahun in list(traverseTahun):
+            insert_data(table="tree_upload",data={
+                "link_detail":tahun,
+                "level":4,
+                "tipe":"upload",
+                "parent":pengadilan
+            },key="link_detail")
+    
         with open("crawl_populate.json","w") as f:
             f.write(json.dumps(self.tree))
         
