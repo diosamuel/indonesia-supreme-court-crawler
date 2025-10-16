@@ -72,4 +72,15 @@ class EkstraksiPDFItem(scrapy.Item):
     nomor_ktp = scrapy.Field()              
     nomor_kk = scrapy.Field()               
     nomor_akta_kelahiran = scrapy.Field()   
-    nomor_paspor = scrapy.Field()           
+    nomor_paspor = scrapy.Field()
+
+# ==========================
+# Tabel: tree_pengadilan
+# ==========================
+class TreePengadilanItem(scrapy.Item):
+    level = scrapy.Field()
+    tipe = scrapy.Field()
+    link_detail = scrapy.Field()
+    id = scrapy.Field()
+    parent = scrapy.Field()
+    h1_title = scrapy.Field()  # For storing extracted h1 title           

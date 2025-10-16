@@ -1,5 +1,6 @@
 import re
 import json
+import logging
 from datetime import datetime
 from itemadapter import ItemAdapter
 from scripts.utils import make_hash_id
@@ -81,5 +82,3 @@ class DeskripsiPutusanItemPipeline:
                     },
                     key="kasasi")
         return dict(adapter)
-    
-    

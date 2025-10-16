@@ -1,9 +1,9 @@
 -- ============================================================
 -- Database
 -- ============================================================
-CREATE DATABASE IF NOT EXISTS putusan;
+-- CREATE DATABASE IF NOT EXISTS putusan;
 
-USE putusan;
+-- USE putusan;
 
 -- ============================================================
 -- TABEL: informasi_putusan
@@ -75,23 +75,23 @@ ORDER BY (nomor, upload);
 -- TABEL: ekstraksi_pdf
 -- Ref: ekstraksi_pdf.hash_id -> informasi_putusan.hash_id (non-enforced)
 -- ============================================================
-CREATE TABLE IF NOT EXISTS ekstraksi_pdf (
-    hash_id String,        -- PK (konseptual)
-    link_pdf Nullable(String),
-    peran_pihak Nullable(String),
-    tempat_lahir Nullable(String),
-    tanggal_lahir Nullable(String),
-    usia Nullable(Int32),
-    jenis_kelamin Nullable(String),
-    pekerjaan Nullable(String),
-    agama Nullable(String),
-    nomor_ktp Nullable(String),
-    nomor_kk Nullable(String),
-    nomor_akta_kelahiran Nullable(String),
-    nomor_paspor Nullable(String)
-)
-ENGINE = MergeTree
-ORDER BY hash_id;
+-- CREATE TABLE IF NOT EXISTS ekstraksi_pdf (
+--     hash_id String,        -- PK (konseptual)
+--     link_pdf Nullable(String),
+--     peran_pihak Nullable(String),
+--     tempat_lahir Nullable(String),
+--     tanggal_lahir Nullable(String),
+--     usia Nullable(Int32),
+--     jenis_kelamin Nullable(String),
+--     pekerjaan Nullable(String),
+--     agama Nullable(String),
+--     nomor_ktp Nullable(String),
+--     nomor_kk Nullable(String),
+--     nomor_akta_kelahiran Nullable(String),
+--     nomor_paspor Nullable(String)
+-- )
+-- ENGINE = MergeTree
+-- ORDER BY hash_id;
 
 --
 create table tree_direktori (

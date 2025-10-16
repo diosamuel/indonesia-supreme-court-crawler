@@ -18,7 +18,7 @@ tree = {
 class GenerateTree(scrapy.Spider):
     name = "generate_tree"
     allowed_domains = ["putusan3.mahkamahagung.go.id"]
-    start_urls = [ "https://putusan3.mahkamahagung.go.id/direktori.html" ]
+    start_urls = [ "ht  tps://putusan3.mahkamahagung.go.id/direktori.html" ]
     tree = {}
     def parse(self, response):
         traverseDirektori = response.xpath('(//*[@aria-labelledby="headingOne"])[1]//a/@href').getall()
@@ -92,8 +92,8 @@ class GenerateTree(scrapy.Spider):
                         'klasifikasi':klasifikasi,
                         'pengadilan':pengadilan
                     })
-        with open("logger.log",'w') as f:
-            f.write(f"{direktori} - {klasifikasi} - {pengadilan}")
+        # with open("logger.log",'w') as f:
+        #     f.write(f"{direktori} - {klasifikasi} - {pengadilan}")
 
         with open("crawl_populate.json","w") as f:
             f.write(json.dumps(self.tree))            
